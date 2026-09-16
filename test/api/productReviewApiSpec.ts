@@ -32,11 +32,11 @@ describe('/rest/products/:id/reviews', () => {
       .expect('jsonTypes', reviewResponseSchema)
   })
 
-  it('GET product reviews attack by injecting a mongoDB sleep command', () => {
+  it('GET product reviews rejects an injected MongoDB sleep command', () => {
     return frisby.get(`${REST_URL}/products/sleep(1)/reviews`)
-      .expect('status', 200)
+      .expect('status', 400)
       .expect('header', 'content-type', /application\/json/)
-      .expect('jsonTypes', reviewResponseSchema)
+      .expect('json', { error: 'Wrong Params' })
   })
 
   xit('GET product reviews by alphanumeric non-mongoDB-command product id', () => { // FIXME Turn on when #1960 is resolved
